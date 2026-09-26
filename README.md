@@ -1,62 +1,31 @@
 <p align="center">
-  <img src="img/banner.png" alt="Wishlist - Treat yourself responsibly" width="640" />
+  <img src="img/banner.png" alt="Wishlist: a wishlist that makes you wait. Your allowance grows by the second; impulse buys freeze it." width="100%" />
 </p>
 
----
-
-Wishlist helps you manage the things you want so you can buy the things you actually want without the guilt.
-
-- 💰 **Set a budget** — Pick a monthly amount. Watch it grow in real-time.
-- 📝 **Add what you want** — Paste any product URL. The app pulls in the details automatically.
-- ⏳ **Wait before buying** — A cool-off period helps you separate impulse from intent. Get penalized if you cave too early.
-- 📊 **Track prices** — Automatic daily price monitoring. Get notified of drops and rises.
-- 📦 **Track delivery** — Link tracking numbers to items and monitor shipments in real-time.
-- 🎯 **Prioritize** — Set your most wanted item. Everything else is measured against it.
-- 🔗 **Share wishlists** — Share your list with friends and family.
-- ✨ **Buy guilt-free** — When you've saved and waited, it feels earned.
-- 📱 **Install on mobile** — Works as a PWA app on iOS and Android.
-- 🗂️ **Or let it go** — Removing something you don't need? That's clarity, not failure.
-
----
-
-## How It Works
-
-**Add anything you want.** Paste a URL from any shopping site. The app extracts product name, image, and price automatically. We handle sites with anti-bot protection so you don't have to.
-
-**Watch your budget grow in real-time.** Set a monthly amount and watch it accumulate down to the cent. Open the app after a few days and see exactly how much you've earned by waiting.
-
-**Prices tracked automatically.** Every day, we check prices on items you've wishlisted. If a price drops, you get notified. If a link breaks, we tell you exactly why and give you options to recover.
-
-**Get a cool-off period.** Each item has a minimum wait time. Bought an item within a week of adding it? Your budget freezes for 7 days—a penalty that encourages you to separate impulse from intent. Items on your list for a month? No penalty.
-
-**Track deliveries.** Add a tracking number to any item and watch it travel. Get status updates as it ships, arrives, and gets delivered.
-
-**Buy without guilt.** When an item is ready, you can afford it, and you've waited long enough, you've genuinely earned it. Mark it as bought. Celebrate.
-
----
-
-## Key Features
-
-**Impulse Control Built In.** Buy an item within a week of adding it? Your budget freezes for 7 days—a gentle reminder that waiting is the point. Items on your list for a month or more? No penalty. The system rewards patience.
-
-**Price Tracking That Actually Works.** We check prices daily, but only for sites we can actually read. Broken links get flagged with a specific reason ("Link moved", "Different product", etc.) so you know what happened. Manual recovery options let you restart tracking or disable it per item. Get notified when prices drop or spike.
-
-**Track What You've Ordered.** Link tracking numbers to items and see real-time updates from couriers. Know exactly when your purchase is arriving.
-
-**Organize Anything.** Create categories to group items—Skincare, Jewelry, Clothing, whatever makes sense. Smart suggestions help categorize items as you add them. Share your whole list with friends or family.
-
-**Notifications That Matter.** Get alerts for price changes, upcoming freeze expirations, budget milestones reached, and delivery status updates. Push notifications work on mobile and desktop.
-
-**Works Offline, Installable.** Add Wishlist to your home screen on iOS or Android. It works like a native app, even without internet.
-
----
-
-## Screenshots
+**A wishlist that makes you wait.** Set a monthly allowance and watch it grow by the
+second. Everything you want sits on the list until it has cooled off and you can afford
+it, and buying on impulse freezes your balance for a week.
 
 <p align="center">
-  <img src="img/budget.png" alt="While you were away - showing accumulated savings" width="250" />
-  <img src="img/wishlist.png" alt="Wishlist grid with items" width="250" />
-  <img src="img/item-detail.png" alt="Item detail drawer" width="250" />
+  <img src="img/hero.gif" alt="The balance ticks up from $214.80; buying $165 sneakers that are still cooling off drops it to $49.80 and freezes it for 7 days" width="360" />
+</p>
+
+- **Money you can see.** Your allowance accrues continuously, so `$214.807159` becomes
+  `$214.807160` while you watch. A purchase comes straight off the top.
+- **A cooling-off period on everything.** You set the rule ("3 days for every $100"), and
+  each item shows how long it has left: *Growing on you · 2d left*, then *Ready to treat*.
+- **Impulse has a price.** Buy something before it's ready and the balance stops for 7 days.
+- **Paste a link, get the product.** Name, photo and price come from the URL, including
+  shops that block scrapers.
+- **Prices watched for you.** Every item is re-checked daily; drops and rises notify you,
+  and a dead link says why instead of recording a wrong price.
+- **Share it for gifts.** Friends see your list and can gift an item with a note and a
+  tracking link; it comes off your list and you get a notification.
+- **Installs like an app** on iOS and Android, with push notifications.
+
+<p align="center">
+  <img src="frontend/public/whats-new/price-tracking.png" alt="Price history for an item: added at $185, now $149" width="360" />
+  <img src="frontend/public/whats-new/gift-dialog.png" alt="A friend gifting an item from your shared list" width="300" />
 </p>
 
 ---
