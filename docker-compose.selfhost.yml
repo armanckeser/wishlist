@@ -1,0 +1,102 @@
+# Self-hosted deployment config - mirrors cosmos-compose.json for local testing
+# Usage: docker compose -f docker-compose.selfhost.yml up -d
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        - VITE_API_URL=http://localhost:8000
+        - NODE_ENV=production
+    image: ghcr.io/armanckeser/wishlist-frontend:latest
+    container_name: wishlist-frontend
+    hostname: wishlist-frontend
+    restart: unless-stopped
+    networks:
+      - wishlist
+    ports:
+      - "8080:80"  # Expose frontend on port 8080 for local testing
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  backend:
+    build:
+      context: ./backend
+    image: ghcr.io/armanckeser/wishlist-backend:latest
+    container_name: wishlist-backend
+    hostname: backend
+    restart: unless-stopped
+    command: bash scripts/start-with-prestart.sh
+    networks:
+      - wishlist
+    env_file:
+      - .env
+    environment:
+      - PROJECT_NAME=wishlist
+      - DOMAIN=localhost
+      - ENVIRONMENT=production
+      - FRONTEND_HOST=http://frontend:80
+      - BACKEND_CORS_ORIGINS=
+      - SECRET_KEY=${SECRET_KEY:-changethis-generate-a-real-secret}
+      - FIRST_SUPERUSER=${FIRST_SUPERUSER:-admin@example.com}
+      - FIRST_SUPERUSER_PASSWORD=${FIRST_SUPERUSER_PASSWORD:-changethis}
+      - POSTGRES_SERVER=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=wishlist
+      - POSTGRES_USER=wishlist
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changethis}
+      # Email settings
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-587}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASSWORD=${SMTP_PASSWORD:-}
+      - SMTP_TLS=${SMTP_TLS:-True}
+      - SMTP_SSL=${SMTP_SSL:-False}
+      - EMAILS_FROM_EMAIL=${EMAILS_FROM_EMAIL:-}
+      # Tracking settings
+      - SEVENTEENTRACK_SECURITY_KEY=${SEVENTEENTRACK_SECURITY_KEY:-}
+      - SCHEDULER_ENABLED=${SCHEDULER_ENABLED:-true}
+      - SCHEDULER_TRACKING_SYNC_MINUTES=${SCHEDULER_TRACKING_SYNC_MINUTES:-30}
+      - PRICE_TRACKING_ENABLED=${PRICE_TRACKING_ENABLED:-true}
+      - SCHEDULER_PRICE_CHECK_MINUTES=${SCHEDULER_PRICE_CHECK_MINUTES:-60}
+      # Push notification settings
+      - VAPID_PUBLIC_KEY=${VAPID_PUBLIC_KEY:-}
+      - VAPID_PRIVATE_KEY=${VAPID_PRIVATE_KEY:-}
+      - VAPID_SUBJECT=${VAPID_SUBJECT:-}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17
+    container_name: wishlist-db
+    hostname: wishlist-db
+    restart: unless-stopped
+    networks:
+      - wishlist
+    volumes:
+      - wishlist-db-data:/var/lib/postgresql/data/pgdata
+    environment:
+      - PGDATA=/var/lib/postgresql/data/pgdata
+      - POSTGRES_DB=wishlist
+      - POSTGRES_USER=wishlist
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changethis}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U wishlist -d wishlist"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+networks:
+  wishlist:
+
+volumes:
+  wishlist-db-data:

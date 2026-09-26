@@ -1,0 +1,229 @@
+{
+  "cosmos-installer": {
+    "form": [
+      {
+        "name": "FIRST_SUPERUSER",
+        "label": "Admin email address",
+        "initialValue": "admin@example.com",
+        "type": "text"
+      },
+      {
+        "name": "SMTP_HOST",
+        "label": "SMTP Host (optional, for emails)",
+        "initialValue": "",
+        "type": "text"
+      },
+      {
+        "name": "SMTP_USER",
+        "label": "SMTP Username",
+        "initialValue": "",
+        "type": "text"
+      },
+      {
+        "name": "SMTP_PASSWORD",
+        "label": "SMTP Password",
+        "initialValue": "",
+        "type": "password"
+      },
+      {
+        "name": "EMAILS_FROM_EMAIL",
+        "label": "From email address",
+        "initialValue": "",
+        "type": "text"
+      },
+      {
+        "name": "FLARESOLVERR_URL",
+        "label": "FlareSolverr URL (change only if using external instance)",
+        "initialValue": "http://flaresolverr:8191/v1",
+        "type": "text"
+      }
+    ],
+    "post-install": [
+      {
+        "type": "info",
+        "label": "Wishlist has been installed! Access it at your configured URL."
+      }
+    ]
+  },
+  "minVersion": "0.8.0",
+  "services": {
+    "{ServiceName}": {
+      "image": "ghcr.io/armanckeser/wishlist-frontend:latest",
+      "container_name": "{ServiceName}",
+      "hostname": "{ServiceName}",
+      "restart": "unless-stopped",
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-auto-update": "true",
+        "cosmos-icon": "https://raw.githubusercontent.com/armanckeser/wishlist/main/frontend/public/favicon.svg",
+        "cosmos-persistent-env": "POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, SECRET_KEY, FIRST_SUPERUSER, FIRST_SUPERUSER_PASSWORD, SMTP_HOST, SMTP_USER, SMTP_PASSWORD, EMAILS_FROM_EMAIL",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}": {}
+      },
+      "routes": [
+        {
+          "name": "{ServiceName}",
+          "description": "Wishlist frontend",
+          "useHost": true,
+          "target": "http://{ServiceName}:80",
+          "mode": "SERVAPP",
+          "Timeout": 30000,
+          "ThrottlePerMinute": 1000,
+          "BlockCommonBots": true,
+          "SmartShield": {
+            "Enabled": true
+          }
+        }
+      ]
+    },
+    "{ServiceName}-backend": {
+      "image": "ghcr.io/armanckeser/wishlist-backend:latest",
+      "container_name": "{ServiceName}-backend",
+      "hostname": "backend",
+      "restart": "unless-stopped",
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-auto-update": "true",
+        "cosmos-persistent-env": "POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, SECRET_KEY, FIRST_SUPERUSER, FIRST_SUPERUSER_PASSWORD, SMTP_HOST, SMTP_USER, SMTP_PASSWORD, EMAILS_FROM_EMAIL, FLARESOLVERR_URL",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}": {
+          "aliases": ["backend"]
+        }
+      },
+      "environment": [
+        "PROJECT_NAME=wishlist",
+        "DOMAIN=localhost",
+        "ENVIRONMENT=production",
+        "FRONTEND_HOST=http://{ServiceName}:80",
+        "BACKEND_CORS_ORIGINS=",
+        "SECRET_KEY={Passwords.1}",
+        "FIRST_SUPERUSER={Context.FIRST_SUPERUSER}",
+        "FIRST_SUPERUSER_PASSWORD={Passwords.0}",
+        "POSTGRES_SERVER={ServiceName}-db",
+        "POSTGRES_PORT=5432",
+        "POSTGRES_DB=wishlist",
+        "POSTGRES_USER=wishlist",
+        "POSTGRES_PASSWORD={Passwords.2}",
+        "SMTP_HOST={Context.SMTP_HOST}",
+        "SMTP_PORT=587",
+        "SMTP_USER={Context.SMTP_USER}",
+        "SMTP_PASSWORD={Context.SMTP_PASSWORD}",
+        "SMTP_TLS=True",
+        "SMTP_SSL=False",
+        "EMAILS_FROM_EMAIL={Context.EMAILS_FROM_EMAIL}",
+        "FLARESOLVERR_URL={Context.FLARESOLVERR_URL}"
+      ],
+      "healthcheck": {
+        "test": ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"],
+        "interval": 10,
+        "timeout": 5,
+        "retries": 5,
+        "start_period": 30
+      }
+    },
+    "{ServiceName}-prestart": {
+      "image": "ghcr.io/armanckeser/wishlist-backend:latest",
+      "container_name": "{ServiceName}-prestart",
+      "hostname": "{ServiceName}-prestart",
+      "restart": "no",
+      "command": "bash scripts/prestart.sh",
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-persistent-env": "POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, SECRET_KEY, FIRST_SUPERUSER, FIRST_SUPERUSER_PASSWORD, SMTP_HOST, SMTP_USER, SMTP_PASSWORD, EMAILS_FROM_EMAIL",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}": {}
+      },
+      "environment": [
+        "PROJECT_NAME=wishlist",
+        "DOMAIN=localhost",
+        "ENVIRONMENT=production",
+        "FRONTEND_HOST=http://{ServiceName}:80",
+        "BACKEND_CORS_ORIGINS=",
+        "SECRET_KEY={Passwords.1}",
+        "FIRST_SUPERUSER={Context.FIRST_SUPERUSER}",
+        "FIRST_SUPERUSER_PASSWORD={Passwords.0}",
+        "POSTGRES_SERVER={ServiceName}-db",
+        "POSTGRES_PORT=5432",
+        "POSTGRES_DB=wishlist",
+        "POSTGRES_USER=wishlist",
+        "POSTGRES_PASSWORD={Passwords.2}",
+        "SMTP_HOST={Context.SMTP_HOST}",
+        "SMTP_PORT=587",
+        "SMTP_USER={Context.SMTP_USER}",
+        "SMTP_PASSWORD={Context.SMTP_PASSWORD}",
+        "SMTP_TLS=True",
+        "SMTP_SSL=False",
+        "EMAILS_FROM_EMAIL={Context.EMAILS_FROM_EMAIL}"
+      ]
+    },
+    "{ServiceName}-db": {
+      "image": "postgres:17",
+      "container_name": "{ServiceName}-db",
+      "hostname": "{ServiceName}-db",
+      "restart": "unless-stopped",
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-auto-update": "true",
+        "cosmos-persistent-env": "POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}": {}
+      },
+      "volumes": [
+        {
+          "source": "{ServiceName}-db-data",
+          "target": "/var/lib/postgresql/data/pgdata",
+          "type": "volume"
+        }
+      ],
+      "environment": [
+        "PGDATA=/var/lib/postgresql/data/pgdata",
+        "POSTGRES_DB=wishlist",
+        "POSTGRES_USER=wishlist",
+        "POSTGRES_PASSWORD={Passwords.2}"
+      ],
+      "healthcheck": {
+        "test": ["CMD-SHELL", "pg_isready -U wishlist -d wishlist"],
+        "interval": 10,
+        "timeout": 10,
+        "retries": 5,
+        "start_period": 30
+      }
+    },
+    "{ServiceName}-flaresolverr": {
+      "image": "ghcr.io/flaresolverr/flaresolverr:latest",
+      "container_name": "{ServiceName}-flaresolverr",
+      "hostname": "flaresolverr",
+      "restart": "unless-stopped",
+      "labels": {
+        "cosmos-force-network-secured": "true",
+        "cosmos-auto-update": "true",
+        "cosmos-stack": "{ServiceName}",
+        "cosmos-stack-main": "{ServiceName}"
+      },
+      "networks": {
+        "{ServiceName}": {
+          "aliases": ["flaresolverr"]
+        }
+      },
+      "environment": [
+        "LOG_LEVEL=info",
+        "TZ=UTC"
+      ]
+    }
+  },
+  "networks": {
+    "{ServiceName}": {}
+  }
+}

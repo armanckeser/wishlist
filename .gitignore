@@ -1,0 +1,15 @@
+.vscode
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+.env
+.DS_Store
+.pyscn/
+# Personal seed data. `wishlist-cli prepopulate run` reads this path by default;
+# keep your own copy here, untracked.
+backend/data/product_urls.csv
+backend/notebooks/url_metadata_analysis.ipynb
+.git.backup/
+.idea/

@@ -1,0 +1,633 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Milestone / Gamification */
+  --color-milestone-gold: var(--milestone-gold);
+  --color-milestone-gold-bright: var(--milestone-gold-bright);
+
+  /* Price tracking deltas (down = good, up = not) */
+  --color-price-drop: var(--price-drop);
+  --color-price-rise: var(--price-rise);
+
+  /* Typography */
+  --font-display: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+/* =============================================================================
+   FROST (Light Mode) - Cool & Crisp
+   ============================================================================= */
+:root {
+  --radius: 0.625rem;
+
+  /* Backgrounds - unified */
+  --background: oklch(0.985 0.002 240);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+
+  /* Primary - Neutral black (luxury brand) */
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+
+  /* Secondary */
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+
+  /* Muted */
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+
+  /* Accent - Neutral */
+  --accent: oklch(0.97 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+
+  /* Destructive */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Borders & inputs */
+  --border: oklch(0.922 0 0);
+  --input: oklch(0.922 0 0);
+  --ring: oklch(0.708 0 0);
+
+  /* Milestone effect colors - tasteful gold */
+  --milestone-gold: oklch(0.75 0.14 85);
+  --milestone-gold-bright: oklch(0.9 0.12 80);
+  --milestone-glow: oklch(0.85 0.1 75 / 0.5);
+
+  /* Price tracking deltas - teal drop, muted red rise */
+  --price-drop: oklch(0.55 0.12 170);
+  --price-rise: oklch(0.58 0.17 25);
+
+  /* Charts - neutral palette */
+  --chart-1: oklch(0.4 0 0);
+  --chart-2: oklch(0.5 0 0);
+  --chart-3: oklch(0.6 0 0);
+  --chart-4: oklch(0.7 0 0);
+  --chart-5: oklch(0.8 0 0);
+
+  /* Sidebar - matches background */
+  --sidebar: oklch(0.985 0.002 240);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+/* =============================================================================
+   MIDNIGHT (Dark Mode) - Deep & Premium
+   ============================================================================= */
+.dark {
+  /* Backgrounds - Deep navy-black, unified with sidebar */
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.269 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  /* Primary - Light neutral for dark mode (inverts well) */
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+
+  /* Secondary */
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  /* Muted */
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  /* Accent */
+  --accent: oklch(0.371 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  /* Destructive */
+  --destructive: oklch(0.704 0.191 22.216);
+
+  /* Borders & inputs */
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  /* Milestone effect colors - brighter gold for dark mode */
+  --milestone-gold: oklch(0.8 0.15 80);
+  --milestone-gold-bright: oklch(0.95 0.1 75);
+  --milestone-glow: oklch(0.9 0.12 80 / 0.4);
+
+  /* Price tracking deltas - lifted for dark surfaces */
+  --price-drop: oklch(0.75 0.13 170);
+  --price-rise: oklch(0.72 0.16 25);
+
+  /* Charts - neutral palette */
+  --chart-1: oklch(0.5 0 0);
+  --chart-2: oklch(0.6 0 0);
+  --chart-3: oklch(0.7 0 0);
+  --chart-4: oklch(0.75 0 0);
+  --chart-5: oklch(0.8 0 0);
+
+  /* Sidebar - matches background exactly */
+  --sidebar: oklch(0.145 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.922 0 0);
+  --sidebar-primary-foreground: oklch(0.205 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  button,
+  [role="button"] {
+    cursor: pointer;
+  }
+
+  /* ---------------------------------------------------------------------
+     App shell: the document never scrolls.
+
+     When the document is the scroller, iOS Safari collapses and re-expands
+     its toolbars as you scroll, which changes the layout viewport under
+     every position:fixed element. Safari also only re-lays-out fixed
+     elements once a scroll settles, so during momentum scrolling the
+     add-item FAB visibly travelled up the screen before snapping back, and
+     vaul measured a viewport height that had already changed by the time
+     its drawer animated in (the "overlay starts mid-screen" artifact).
+
+     Pinning the shell to the viewport keeps Safari's chrome stable, so
+     fixed elements stay put and drawers measure a viewport that is not
+     moving. Scrolling happens inside [data-app-scroll] instead.
+     --------------------------------------------------------------------- */
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+    /* Stop rubber-banding the whole page — the inner region owns scrolling. */
+    overscroll-behavior: none;
+  }
+
+  #root {
+    /* dvh, not vh: on iOS vh resolves against the *large* viewport (chrome
+       hidden), which would make the shell taller than the visible area. */
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* The one scrolling element in the app shell. min-height:0 is what lets a
+     flex child actually shrink below its content size and scroll. */
+  [data-app-scroll] {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+  }
+}
+
+/* =============================================================================
+   iOS Safari Touch Prevention
+   Prevents native context menus, text selection, and image actions on cards
+   ============================================================================= */
+
+/* Interactive cards - allow click/tap but prevent native gestures */
+.touch-card {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Images inside cards - purely visual, no interaction */
+.touch-card img {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Utility classes for typography */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* =============================================================================
+   Budget Milestone Animations
+   ============================================================================= */
+
+/* Cent glow - subtle brightness pulse every $0.01 */
+@keyframes centGlow {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.12);
+  }
+}
+
+.cent-glow {
+  animation: centGlow 400ms ease-out;
+}
+
+/* Dollar glow - slightly more pronounced */
+@keyframes dollarGlow {
+  0%,
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  50% {
+    filter: brightness(1.15);
+    transform: scale(1.02);
+  }
+}
+
+.dollar-glow {
+  animation: dollarGlow 500ms ease-out;
+}
+
+/* Ten dollar glow - even more pronounced */
+@keyframes tenDollarGlow {
+  0%,
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  40% {
+    filter: brightness(1.2);
+    transform: scale(1.03);
+  }
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+.ten-dollar-glow {
+  animation: tenDollarGlow 600ms ease-out;
+}
+
+/* Hundred dollar glow - celebratory */
+@keyframes hundredDollarGlow {
+  0% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  30% {
+    filter: brightness(1.25);
+    transform: scale(1.04);
+  }
+  60% {
+    filter: brightness(1.15);
+    transform: scale(1.02);
+  }
+  100% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+}
+
+.hundred-dollar-glow {
+  animation: hundredDollarGlow 800ms ease-out;
+}
+
+/* =============================================================================
+   Animated Gold Gradient Text
+   ============================================================================= */
+
+@keyframes goldGradientShift {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.gold-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.95 0.08 75),
+    oklch(0.85 0.14 80),
+    oklch(1 0 0),
+    oklch(0.9 0.12 85),
+    oklch(0.95 0.08 75)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: goldGradientShift 3s ease-in-out infinite;
+}
+
+.dark .gold-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.92 0.1 80),
+    oklch(0.8 0.15 75),
+    oklch(1 0 0),
+    oklch(0.88 0.12 85),
+    oklch(0.92 0.1 80)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: goldGradientShift 3s ease-in-out infinite;
+}
+
+/* Blue gradient for frozen budget state */
+@keyframes blueGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.blue-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.85 0.12 240),
+    oklch(0.75 0.18 250),
+    oklch(0.95 0.05 220),
+    oklch(0.8 0.15 260),
+    oklch(0.85 0.12 240)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: blueGradientShift 4s ease-in-out infinite;
+}
+
+.dark .blue-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.75 0.15 245),
+    oklch(0.65 0.2 255),
+    oklch(0.9 0.08 230),
+    oklch(0.72 0.17 260),
+    oklch(0.75 0.15 245)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: blueGradientShift 4s ease-in-out infinite;
+}
+
+/* Red gradient for negative balance */
+@keyframes redGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.red-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.65 0.2 25),
+    oklch(0.55 0.25 15),
+    oklch(0.75 0.15 30),
+    oklch(0.6 0.22 20),
+    oklch(0.65 0.2 25)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: redGradientShift 4s ease-in-out infinite;
+}
+
+.dark .red-gradient-text {
+  background: linear-gradient(
+    135deg,
+    oklch(0.6 0.22 20),
+    oklch(0.5 0.27 10),
+    oklch(0.7 0.18 25),
+    oklch(0.55 0.24 15),
+    oklch(0.6 0.22 20)
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: redGradientShift 4s ease-in-out infinite;
+}
+
+/* =============================================================================
+   Gold Shimmer Border (Most Desired Card Indicator)
+   ============================================================================= */
+.gold-shimmer-border {
+  animation: goldBorderShimmer 3s ease-in-out infinite;
+}
+
+@keyframes goldBorderShimmer {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* =============================================================================
+   Golden Shimmer Animation (Most Desired Buy Button)
+   ============================================================================= */
+@keyframes goldenShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.golden-shimmer {
+  position: relative;
+}
+
+.golden-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.4) 25%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0.4) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: goldenShimmer 2.5s ease-in-out infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* =============================================================================
+   Drill-down stack — native scroll-snap drill-down (CategoryPicker etc.)
+   ============================================================================= */
+@media (prefers-reduced-motion: no-preference) {
+  .drill-down-stack {
+    scroll-behavior: smooth;
+  }
+}
+
+/* =============================================================================
+   Native <dialog> — backdrop dimming + iOS rendering smoothness
+   ============================================================================= */
+.native-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  /* iOS Safari renders backdrop without a transition by default; a soft
+     fade matches platform expectations. */
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+/* Lock scrolling while a modal native-dialog is open. showModal() inerts the
+   document for events but iOS Safari still allows touch-scroll underneath,
+   which feels broken behind a fullscreen sheet. The :has() selector (Baseline
+   widely available since 2023) handles this with no JS.
+
+   The app shell already keeps html/body unscrollable, so the rule that
+   actually matters is the one on the inner scroll region. */
+html:has(dialog.native-dialog[open]) [data-app-scroll] {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* iOS Safari paste-menu fix for inputs inside a top-layer <dialog>.
+   When showModal() promotes the dialog to the top layer, WebKit can
+   propagate an inherited user-select:none from ancestor styles down into
+   the dialog subtree, which makes the iOS context-menu "Paste" command
+   silently no-op even though the menu renders. Forcing user-select:text
+   on form fields restores native paste. touch-action:manipulation
+   prevents double-tap zoom from eating the tap that triggers the menu. */
+.native-dialog input,
+.native-dialog textarea {
+  -webkit-user-select: text;
+  user-select: text;
+  touch-action: manipulation;
+}
+
+/* Smooth open transition (Safari 17.4+, Chrome 117+; degrades to instant). */
+@supports (transition-behavior: allow-discrete) {
+  .native-dialog {
+    opacity: 0;
+    transition:
+      opacity 0.18s ease-out,
+      display 0.18s allow-discrete,
+      overlay 0.18s allow-discrete;
+  }
+  .native-dialog[open] {
+    opacity: 1;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+  .native-dialog::backdrop {
+    opacity: 0;
+    transition:
+      opacity 0.18s ease-out,
+      display 0.18s allow-discrete,
+      overlay 0.18s allow-discrete;
+  }
+  .native-dialog[open]::backdrop {
+    opacity: 1;
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+/* =============================================================================
+   Toast Safe Area Support (iOS Dynamic Island / Notch)
+
+   Sonner injects its own stylesheet at runtime, after this one, so a plain
+   [data-sonner-toaster] rule loses the tie and toasts end up under the
+   status bar in the installed app. These selectors carry the position
+   attribute as well, which outranks it whatever the order.
+   ============================================================================= */
+[data-sonner-toaster][data-y-position="top"] {
+  top: calc(env(safe-area-inset-top, 0px) + 12px);
+}
+
+[data-sonner-toaster][data-y-position="bottom"] {
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+}
