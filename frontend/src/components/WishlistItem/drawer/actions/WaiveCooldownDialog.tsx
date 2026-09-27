@@ -97,7 +97,7 @@ export function WaiveCooldownDialog({
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              This will add a note to your item. This action cannot be undone.
+              Adds a permanent note to this item.
             </AlertDescription>
           </Alert>
         </div>

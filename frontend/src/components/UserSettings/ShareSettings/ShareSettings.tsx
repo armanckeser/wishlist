@@ -150,7 +150,7 @@ function ShareSettings() {
 
         {myShares?.data.length === 0 ? (
           <p className="text-sm text-muted-foreground">
-            Add people below to share your wishlist with them directly.
+            Not shared with anyone yet.
           </p>
         ) : (
           <ul className="space-y-2">
@@ -236,8 +236,7 @@ function ShareSettings() {
         </Select>
         {!showShareLink && (
           <p className="text-xs text-muted-foreground">
-            Add people above or set visibility to public to get a shareable
-            link.
+            Add people or make it public to get a link.
           </p>
         )}
       </section>

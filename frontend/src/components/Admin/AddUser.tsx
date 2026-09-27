@@ -100,9 +100,7 @@ const AddUser = () => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Add User</DialogTitle>
-          <DialogDescription>
-            Fill in the form below to add a new user to the system.
-          </DialogDescription>
+          <DialogDescription className="sr-only">New user details</DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

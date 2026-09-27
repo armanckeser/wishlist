@@ -54,7 +54,7 @@ export function FilterDimensionPage({
       <div className="flex min-h-0 flex-1 flex-col">
         <PageHeader title={dimension.label} onBack={onBack} onDone={onDone} />
         <div className="px-4 pb-2 text-xs text-muted-foreground">
-          Tap to include, tap again to exclude, tap third time to clear
+          Tap: include → exclude → clear
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-4">
           <SelectRow

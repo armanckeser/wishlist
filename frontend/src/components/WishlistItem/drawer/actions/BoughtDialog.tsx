@@ -165,7 +165,7 @@ export function BoughtDialog({
                 />
               </div>
               <p className="text-xs text-muted-foreground">
-                If you paid a different price (sale, coupon, etc.)
+                If you paid a different price
               </p>
             </div>
 

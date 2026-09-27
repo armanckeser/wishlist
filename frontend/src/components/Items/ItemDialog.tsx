@@ -244,9 +244,9 @@ export function ItemDialog(props: ItemDialogProps) {
   const description =
     mode === "add"
       ? props.trackingMode
-        ? "Paste a tracking number or URL to track your package."
-        : "Paste a product URL to auto-fill details, or enter manually."
-      : "Paste a new URL to refresh the details."
+        ? "Paste a tracking number or link."
+        : "Paste a product link, or fill it in yourself."
+      : "Paste a new link to refresh the details."
 
   const submitLabel = mode === "add" ? "Save" : "Save Changes"
 

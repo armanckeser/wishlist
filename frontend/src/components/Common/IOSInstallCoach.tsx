@@ -93,8 +93,7 @@ export function IOSInstallCoach() {
           </div>
           <DrawerTitle className="text-xl">Install Wishlist</DrawerTitle>
           <DrawerDescription>
-            Add to your Home Screen for the best experience — full-screen, fast,
-            and offline-ready.
+            Add it to your Home Screen to use it full-screen and offline.
           </DrawerDescription>
         </DrawerHeader>
 

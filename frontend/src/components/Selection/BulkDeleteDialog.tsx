@@ -53,8 +53,7 @@ export function BulkDeleteDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Delete {selectedCount} items?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. The selected items will be permanently
-            removed from your wishlist.
+            This can’t be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

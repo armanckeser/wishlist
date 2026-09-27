@@ -45,19 +45,19 @@ const STATUS: Record<
   link_moved: {
     icon: Link2Off,
     label: "Link moved",
-    hint: "This link now opens a different page, so the price on it isn't this item's. Update the link to keep tracking.",
+    hint: "This link opens a different page now. Update it to keep tracking.",
     needsLink: true,
   },
   different_product: {
     icon: Link2Off,
     label: "Wrong page",
-    hint: "The page at this link shows a different product now. Update the link to keep tracking.",
+    hint: "This link shows a different product now. Update it to keep tracking.",
     needsLink: true,
   },
   blocked: {
     icon: ShieldAlert,
     label: "Blocked",
-    hint: "The store is turning away automated checks. We'll keep trying.",
+    hint: "The store is blocking price checks. We'll keep trying.",
   },
   unreachable: {
     icon: CloudOff,
@@ -67,12 +67,12 @@ const STATUS: Record<
   no_price: {
     icon: TriangleAlert,
     label: "No price",
-    hint: "The page loaded without a price on it - the item may be sold out.",
+    hint: "No price on the page. It may be sold out.",
   },
   implausible: {
     icon: TriangleAlert,
     label: "Odd price",
-    hint: "The price we read was too far from this item's to be believable, so we ignored it.",
+    hint: "The price we found looked wrong, so we ignored it.",
   },
   no_link: {
     icon: Link2Off,
@@ -368,9 +368,8 @@ function RestartButton({
         {armed ? "Sure?" : "Start over"}
       </button>
       <Hint label="What starting over does">
-        Forgets every reading and puts the price back to the{" "}
-        {formatCents(addedPriceCents)} it was added at. The next check starts a
-        clean record.
+        Clears the history and resets the price to{" "}
+        {formatCents(addedPriceCents)}, what it was when added.
       </Hint>
     </span>
   )

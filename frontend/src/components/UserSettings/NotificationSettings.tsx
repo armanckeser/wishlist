@@ -53,8 +53,7 @@ const NotificationSettings = () => {
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Permission denied</AlertTitle>
           <AlertDescription>
-            Notification permission was denied. To enable push notifications,
-            please update your browser settings for this site.
+            Allow notifications for this site in your browser settings.
           </AlertDescription>
         </Alert>
       </div>
@@ -65,8 +64,7 @@ const NotificationSettings = () => {
     <div className="max-w-md">
       <h3 className="text-lg font-semibold py-4">Push Notifications</h3>
       <p className="text-muted-foreground mb-4">
-        Get notified when you receive gifts, your freeze is expiring, or you hit
-        budget milestones.
+        Gifts, freezes ending and budget milestones.
       </p>
 
       {isSubscribed ? (

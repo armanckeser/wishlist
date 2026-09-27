@@ -11,8 +11,7 @@ export function FreezeSection({ onUnfreeze, isPending }: FreezeSectionProps) {
       <div>
         <h4 className="text-sm font-medium">Budget Frozen</h4>
         <p className="text-sm text-muted-foreground">
-          Your budget is currently frozen and not accruing. You can manually
-          unfreeze it below.
+          Your budget isn’t growing while it’s frozen.
         </p>
       </div>
       <LoadingButton
