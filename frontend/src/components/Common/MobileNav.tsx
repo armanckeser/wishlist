@@ -118,7 +118,7 @@ export function MobileNav({ onWhatsNewClick }: MobileNavProps) {
         </Button>
       </DrawerTrigger>
       <DrawerContent
-        className="max-h-[85dvh] pb-8"
+        className="max-h-[85dvh] pb-[max(2rem,env(safe-area-inset-bottom))]"
         aria-describedby={undefined}
       >
         <DrawerHeader className="pb-2">

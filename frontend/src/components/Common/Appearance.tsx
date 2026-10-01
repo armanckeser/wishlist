@@ -17,8 +17,8 @@ export const Appearance = () => {
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button data-testid="theme-button" variant="outline" size="icon">
-            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+            <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 opacity-100 transition-[transform,rotate,scale,opacity] duration-200 ease-(--ease-out) dark:-rotate-90 dark:scale-50 dark:opacity-0" />
+            <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-50 opacity-0 transition-[transform,rotate,scale,opacity] duration-200 ease-(--ease-out) dark:rotate-0 dark:scale-100 dark:opacity-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </DropdownMenuTrigger>

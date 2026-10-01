@@ -49,7 +49,7 @@ export function KeepSavingButton({
       onClick={handleClick}
       disabled={isCollecting}
       className={cn(
-        "relative w-full overflow-hidden transition-all duration-300",
+        "relative w-full overflow-hidden transition-[color,background-color,border-color,transform] duration-300",
         showFeedback && "border-amber-500/60 bg-amber-500/10",
         className,
       )}
@@ -64,7 +64,7 @@ export function KeepSavingButton({
               className="absolute z-0 h-2 w-2 rounded-full bg-amber-400 shadow-sm"
               style={{ left: "50%", x: "-50%", top: -20 }}
               variants={{
-                idle: { y: 0, opacity: 0, scale: 0 },
+                idle: { y: 0, opacity: 0, scale: 0.5 },
                 drop: {
                   y: [0, 25],
                   scale: [1, 0.5],
@@ -72,7 +72,7 @@ export function KeepSavingButton({
                   transition: {
                     delay: i * 0.2,
                     duration: 0.4,
-                    ease: "backIn",
+                    ease: [0.23, 1, 0.32, 1],
                   },
                 },
               }}

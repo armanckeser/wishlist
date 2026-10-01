@@ -52,7 +52,7 @@ export function DrawerImage() {
       type="button"
       onClick={handleToggleExpand}
       className={cn(
-        "relative w-full overflow-hidden rounded-xl bg-muted/50 transition-all duration-300 ease-out",
+        "relative w-full overflow-hidden rounded-xl bg-muted/50 transition-[aspect-ratio] duration-300 ease-out",
         isExpanded ? "aspect-square" : "aspect-[2.4/1]",
         isArchived && "grayscale opacity-60",
       )}
@@ -68,7 +68,7 @@ export function DrawerImage() {
         src={item.image_url}
         alt={item.title}
         className={cn(
-          "h-full w-full transition-all duration-300",
+          "h-full w-full transition-[padding,opacity] duration-300",
           isExpanded ? "object-contain p-4" : "object-cover",
           isLoaded ? "opacity-100" : "opacity-0",
         )}

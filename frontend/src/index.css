@@ -59,6 +59,11 @@
 :root {
   --radius: 0.625rem;
 
+  /* Motion */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+
   /* Backgrounds - unified */
   --background: oklch(0.985 0.002 240);
   --foreground: oklch(0.15 0 0);
@@ -191,9 +196,17 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
   button,
   [role="button"] {
     cursor: pointer;
+  }
+  button,
+  a,
+  [role="button"] {
+    touch-action: manipulation;
   }
 
   /* ---------------------------------------------------------------------
@@ -630,4 +643,17 @@ html:has(dialog.native-dialog[open]) [data-app-scroll] {
 
 [data-sonner-toaster][data-y-position="bottom"] {
   bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+}
+
+/* =============================================================================
+   Reduced motion - also stops the infinite gradient/shimmer loops
+   ============================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
 }

@@ -42,7 +42,7 @@ export function Details() {
       </h2>
 
       {/* Price - uses Price primitive which handles actual_price_paid_cents */}
-      <Price size="xl" />
+      <Price size="xl" className="tabular-nums" />
 
       {/* Categories */}
       {item.categories && item.categories.length > 0 && (

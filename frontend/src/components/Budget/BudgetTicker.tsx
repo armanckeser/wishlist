@@ -144,7 +144,7 @@ export function BudgetTicker({ size = "lg", className }: BudgetTickerProps) {
         <span
           ref={displayRefs.decimalRef}
           className={cn(
-            "font-display text-4xl font-light tabular-nums",
+            "font-display text-4xl font-light tracking-tight tabular-nums",
             !gradientClass && "text-muted-foreground",
           )}
         >

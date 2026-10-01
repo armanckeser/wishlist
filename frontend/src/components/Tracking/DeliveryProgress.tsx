@@ -161,7 +161,7 @@ export function DeliveryProgressMilestones({
 
           {/* Progress gradient line */}
           <div
-            className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 transition-all duration-500"
+            className="absolute left-0 top-1/2 h-0.5 -translate-y-1/2 transition-[width] duration-500"
             style={{
               width: `${Math.max(0, (currentIndex / (displayStages.length - 1)) * 100)}%`,
               background: progressGradient,
@@ -177,7 +177,7 @@ export function DeliveryProgressMilestones({
               <div
                 key={s}
                 className={cn(
-                  "relative z-10 h-2.5 w-2.5 rounded-full border-2 transition-all duration-300",
+                  "relative z-10 h-2.5 w-2.5 rounded-full border-2 transition-[background-color,border-color,box-shadow] duration-300",
                   isCompleted
                     ? "border-transparent"
                     : "border-muted-foreground/30 bg-background",

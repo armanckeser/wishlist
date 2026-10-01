@@ -26,6 +26,33 @@ const initialState: ThemeProviderState = {
   setTheme: () => null,
 }
 
+const THEME_COLORS = { light: "#f9fafb", dark: "#1a1a1a" } as const
+
+// System theme: two media-scoped metas let the browser follow the OS.
+// Explicit theme: a single meta, since the media variants would follow the
+// OS instead of the user's choice.
+function syncThemeColorMeta(theme: Theme) {
+  const head = window.document.head
+  head.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+    m.remove()
+  })
+
+  const add = (content: string, media?: string) => {
+    const meta = window.document.createElement("meta")
+    meta.name = "theme-color"
+    if (media) meta.media = media
+    meta.content = content
+    head.appendChild(meta)
+  }
+
+  if (theme === "system") {
+    add(THEME_COLORS.light, "(prefers-color-scheme: light)")
+    add(THEME_COLORS.dark, "(prefers-color-scheme: dark)")
+  } else {
+    add(THEME_COLORS[theme])
+  }
+}
+
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export function ThemeProvider({
@@ -55,6 +82,7 @@ export function ThemeProvider({
     const root = window.document.documentElement
 
     root.classList.remove("light", "dark")
+    syncThemeColorMeta(newTheme)
 
     if (newTheme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")

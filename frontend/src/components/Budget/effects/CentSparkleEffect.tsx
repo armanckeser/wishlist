@@ -96,7 +96,7 @@ export function CentSparkleEffect({
               rotate: sparkle.rotation + 15,
             }}
             exit={{
-              scale: 0,
+              scale: 0.5,
               opacity: 0,
             }}
             transition={{
@@ -104,7 +104,6 @@ export function CentSparkleEffect({
                 type: "spring",
                 stiffness: 400,
                 damping: 15,
-                duration: 0.3,
               },
               opacity: {
                 duration: 0.35,

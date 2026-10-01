@@ -132,7 +132,7 @@ export function NativeDialog({
       {/* Inner wrapper holds the actual visible chrome. Use bg-card (the
           elevated-surface color) rather than bg-background so the dialog
           reads as distinct above the dimmed backdrop in dark mode. */}
-      <div className="flex h-full w-full flex-col bg-card text-card-foreground sm:rounded-2xl">
+      <div className="flex h-full w-full flex-col bg-card pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)] text-card-foreground sm:rounded-2xl sm:pt-0 sm:pb-0">
         {children}
       </div>
     </dialog>

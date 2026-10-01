@@ -63,8 +63,8 @@ function HorizontalCardInner({
       className={cn(
         "group flex w-full items-center gap-4 rounded-lg p-3 text-left",
         "bg-card border border-border",
-        "transition-all duration-200",
-        "hover:bg-accent/50 active:scale-[0.99]",
+        "transition-[background-color,transform] duration-200",
+        "hover:bg-accent/50 active:scale-[0.98]",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
         (isArchived || isPurchased || isGifted) && "grayscale opacity-60",
         className,
@@ -81,7 +81,7 @@ function HorizontalCardInner({
         <Title className="text-sm" lineClamp={1} />
 
         {/* Price */}
-        <Price size="lg" />
+        <Price size="lg" className="tabular-nums" />
 
         {/* Maturity - full width progress bar */}
         {showMaturity && !isPurchased && !isGifted && !isArchived && (

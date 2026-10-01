@@ -51,7 +51,7 @@ export function MaturityProgress({
       />
       {/* Progress reveal - full opacity */}
       <div
-        className="absolute inset-0 rounded-full transition-all duration-500"
+        className="absolute inset-0 rounded-full transition-[clip-path] duration-500"
         style={{
           background: fillBackground,
           clipPath: `inset(0 ${100 - widthPercent}% 0 0)`,

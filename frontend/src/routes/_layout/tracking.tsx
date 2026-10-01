@@ -210,7 +210,7 @@ function EmptyTrackingState() {
   return (
     <div
       data-testid="empty-tracking-state"
-      className="flex min-h-[50vh] flex-col items-center justify-center gap-4"
+      className="flex min-h-[50svh] flex-col items-center justify-center gap-4"
     >
       <Package className="h-12 w-12 text-muted-foreground/50" />
       <div className="text-center">

@@ -143,7 +143,7 @@ function CardInner({
         "touch-card", // iOS touch prevention
         "group relative flex w-full cursor-pointer flex-col text-left",
         "bg-transparent border-none p-0 font-inherit",
-        "transition-transform duration-300 ease-out",
+        "transition-transform duration-200 ease-(--ease-out)",
         !isSelectionMode && "hover:scale-[1.02] active:scale-[0.98]",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         isSelected &&
@@ -168,7 +168,7 @@ function CardInner({
         {/* Price + Brand + Categories - flex layout with truncation */}
         <div className="flex items-baseline gap-1">
           {/* Price - never shrinks */}
-          <Price size="lg" className="shrink-0" />
+          <Price size="lg" className="shrink-0 tabular-nums" />
           {item.status === "wishlisted" && (
             <>
               <PriceChangeChip

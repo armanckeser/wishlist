@@ -330,7 +330,7 @@ export function BudgetDisplay({ className, tickerRef }: BudgetDisplayProps) {
             <span className="font-display text-7xl md:text-8xl font-light tracking-tight text-foreground tabular-nums">
               {dollars}
             </span>
-            <span className="font-display text-4xl font-light text-muted-foreground tabular-nums">
+            <span className="font-display text-4xl font-light tracking-tight text-muted-foreground tabular-nums">
               .{cents}
             </span>
           </div>
