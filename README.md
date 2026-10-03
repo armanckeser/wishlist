@@ -28,6 +28,8 @@ it, and buying on impulse freezes your balance for a week.
   <img src="frontend/public/whats-new/gift-dialog.png" alt="A friend gifting an item from your shared list" width="300" />
 </p>
 
+If Wishlist is useful to you, starring the repo helps other people find it, and [armanckeser.com/subscribe](https://armanckeser.com/subscribe) has ways to hear about new releases.
+
 ---
 
 ## Why This Exists
