@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures.ts"
 
 test.describe("Public Pages Rendering", () => {
   test.use({ storageState: { cookies: [], origins: [] } })

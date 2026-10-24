@@ -3,17 +3,19 @@ name: Playwright Tests
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
-    types:
-    - opened
-    - synchronize
   workflow_dispatch:
     inputs:
       debug_enabled:
         description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
         required: false
         default: 'false'
+
+# paths-filter reads the pull request's changed files.
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   changes:
@@ -31,7 +33,7 @@ jobs:
           changed:
             - backend/**
             - frontend/**
-            - .env
+            - .env.example
             - docker-compose*.yml
             - .github/workflows/playwright.yml
 
@@ -48,29 +50,19 @@ jobs:
       fail-fast: false
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/setup-node@v6
-      with:
-        node-version: lts/*
-    - uses: actions/setup-python@v6
-      with:
-        python-version: '3.12'
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
       if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'true' }}
       with:
         limit-access-to-actor: true
-    - name: Install uv
-      uses: astral-sh/setup-uv@v7
-      with:
-        version: "0.5.11"
-        enable-cache: true
-    - run: uv sync
-      working-directory: backend
-    - run: npm ci
-      working-directory: frontend
-    - run: uv run bash scripts/generate-client.sh
-      env:
-        VIRTUAL_ENV: backend/.venv
+    # The tests run inside the compose stack, against the committed API client (Generate Client checks it).
+    # The settings docker compose and the tests read; nothing in it is a secret. Package tracking is
+    # on only with a 17track key; a placeholder turns the UI on (carrier detection is local) and the
+    # scheduler stays off, so nothing polls 17track. Registering a test package with it just fails.
+    - run: |
+        cp .env.example .env
+        echo "SEVENTEENTRACK_SECURITY_KEY=e2e-placeholder" >> .env
+        echo "SCHEDULER_ENABLED=false" >> .env
     - run: docker compose build
     - run: docker compose down -v --remove-orphans
     - name: Run Playwright tests

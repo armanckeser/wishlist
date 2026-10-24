@@ -37,7 +37,10 @@ class Settings(BaseSettings):
         extra="ignore",
     )
     API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    # Unset on a self-hosted install: app/boot.py generates one on first start and
+    # keeps it in the database. The random default only serves tests and scripts.
+    SECRET_KEY: str = ""
+    SECRET_KEY_FROM_ENV: bool = False
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     FRONTEND_HOST: str = "http://localhost:5173"
@@ -54,7 +57,7 @@ class Settings(BaseSettings):
             self.FRONTEND_HOST
         ]
 
-    PROJECT_NAME: str
+    PROJECT_NAME: str = "Wishlist"
     SENTRY_DSN: HttpUrl | None = None
 
     # FlareSolverr for bypassing JavaScript challenges (Akamai, etc.)
@@ -101,8 +104,13 @@ class Settings(BaseSettings):
         return bool(self.SMTP_HOST and self.EMAILS_FROM_EMAIL)
 
     EMAIL_TEST_USER: EmailStr = "test@example.com"
-    FIRST_SUPERUSER: EmailStr
-    FIRST_SUPERUSER_PASSWORD: str
+    # Optional. Without them nobody is created up front and the first person signs
+    # up from the login page.
+    FIRST_SUPERUSER: EmailStr | None = None
+    FIRST_SUPERUSER_PASSWORD: str | None = None
+
+    # Set in the single image: the built web app, served next to the API.
+    WEB_ROOT: str | None = None
 
     # VAPID keys for Web Push notifications
     VAPID_PUBLIC_KEY: str | None = None
@@ -145,6 +153,14 @@ class Settings(BaseSettings):
                 warnings.warn(message, stacklevel=1)
             else:
                 raise ValueError(message)
+
+    @model_validator(mode="after")
+    def _default_secret_key(self) -> Self:
+        if self.SECRET_KEY:
+            self.SECRET_KEY_FROM_ENV = True
+        else:
+            self.SECRET_KEY = secrets.token_urlsafe(32)
+        return self
 
     @model_validator(mode="after")
     def _enforce_non_default_secrets(self) -> Self:

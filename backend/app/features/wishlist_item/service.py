@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
-from sqlmodel import Session, func, select
+from sqlmodel import Session, col, func, select
 
 from app.core.exceptions import NotFoundError
 from app.features.category.models import Category
@@ -609,7 +609,7 @@ def bulk_delete_items(
     Returns the count of items actually deleted.
     """
     statement = select(WishlistItem).where(
-        WishlistItem.id.in_(item_ids),
+        col(WishlistItem.id).in_(item_ids),
         WishlistItem.owner_id == owner_id,
     )
     items = list(session.exec(statement).all())
@@ -636,7 +636,7 @@ def bulk_set_categories(
     """
     # Get items that belong to owner
     items_statement = select(WishlistItem).where(
-        WishlistItem.id.in_(item_ids),
+        col(WishlistItem.id).in_(item_ids),
         WishlistItem.owner_id == owner_id,
     )
     items = list(session.exec(items_statement).all())
@@ -645,7 +645,7 @@ def bulk_set_categories(
     categories: list[Category] = []
     if category_ids:
         categories_statement = select(Category).where(
-            Category.id.in_(category_ids),
+            col(Category.id).in_(category_ids),
             Category.owner_id == owner_id,
         )
         categories = list(session.exec(categories_statement).all())
@@ -673,7 +673,7 @@ def bulk_archive_items(
     Returns the count of items actually archived.
     """
     statement = select(WishlistItem).where(
-        WishlistItem.id.in_(item_ids),
+        col(WishlistItem.id).in_(item_ids),
         WishlistItem.owner_id == owner_id,
         WishlistItem.status != WishlistItemStatus.ARCHIVED,
     )
@@ -701,7 +701,7 @@ def bulk_unarchive_items(
     Returns the count of items actually unarchived.
     """
     statement = select(WishlistItem).where(
-        WishlistItem.id.in_(item_ids),
+        col(WishlistItem.id).in_(item_ids),
         WishlistItem.owner_id == owner_id,
         WishlistItem.status == WishlistItemStatus.ARCHIVED,
     )

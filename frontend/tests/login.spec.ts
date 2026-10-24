@@ -1,6 +1,8 @@
-import { expect, type Page, test } from "@playwright/test"
+import type { Page } from "@playwright/test"
 import { firstSuperuser, firstSuperuserPassword } from "./config.ts"
+import { expect, test } from "./fixtures.ts"
 import { randomPassword } from "./utils/random.ts"
+import { logOutUser } from "./utils/user.ts"
 
 test.use({ storageState: { cookies: [], origins: [] } })
 
@@ -45,9 +47,7 @@ test("Log in with valid email and password ", async ({ page }) => {
 
   await page.waitForURL("/")
 
-  await expect(
-    page.getByText("Welcome back, nice to see you again!"),
-  ).toBeVisible()
+  await expect(page.getByText("Available to spend")).toBeVisible()
 })
 
 test("Log in with invalid email", async ({ page }) => {
@@ -79,13 +79,9 @@ test("Successful log out", async ({ page }) => {
 
   await page.waitForURL("/")
 
-  await expect(
-    page.getByText("Welcome back, nice to see you again!"),
-  ).toBeVisible()
+  await expect(page.getByText("Available to spend")).toBeVisible()
 
-  await page.getByTestId("user-menu").click()
-  await page.getByRole("menuitem", { name: "Log out" }).click()
-  await page.waitForURL("/login")
+  await logOutUser(page)
 })
 
 test("Logged-out user cannot access protected routes", async ({ page }) => {
@@ -96,21 +92,20 @@ test("Logged-out user cannot access protected routes", async ({ page }) => {
 
   await page.waitForURL("/")
 
-  await expect(
-    page.getByText("Welcome back, nice to see you again!"),
-  ).toBeVisible()
+  await expect(page.getByText("Available to spend")).toBeVisible()
 
-  await page.getByTestId("user-menu").click()
-  await page.getByRole("menuitem", { name: "Log out" }).click()
-  await page.waitForURL("/login")
+  await logOutUser(page)
 
   await page.goto("/settings")
   await page.waitForURL("/login")
 })
 
 test("Redirects to /login when token is wrong", async ({ page }) => {
-  await page.goto("/settings")
-  await page.evaluate(() => {
+  // Seeded before the first load (goto then evaluate races the app's redirect to /login), and only
+  // once: init scripts run on every load, and the app clears the bad token after the 401.
+  await page.addInitScript(() => {
+    if (sessionStorage.getItem("seeded")) return
+    sessionStorage.setItem("seeded", "1")
     localStorage.setItem("access_token", "invalid_token")
   })
   await page.goto("/settings")

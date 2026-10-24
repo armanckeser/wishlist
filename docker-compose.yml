@@ -143,6 +143,9 @@ services:
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}'
     restart: always
+    # nginx resolves the backend host when it starts, so the backend container must exist first.
+    depends_on:
+      - backend
     networks:
       - traefik-public
       - default

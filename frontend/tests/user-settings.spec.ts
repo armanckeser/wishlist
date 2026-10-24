@@ -1,26 +1,42 @@
-import { expect, test } from "@playwright/test"
+import type { Page } from "@playwright/test"
 import { firstSuperuser, firstSuperuserPassword } from "./config.ts"
+import { expect, test } from "./fixtures.ts"
 import { createUser } from "./utils/privateApi.ts"
 import { randomEmail, randomPassword } from "./utils/random"
 import { logInUser, logOutUser } from "./utils/user"
 
-const tabs = ["My profile", "Password", "Danger zone"]
+// Settings is one page with a section picker; ?tab= opens a section directly.
+const superuserSections = ["Budget", "Notifications", "My profile", "Password"]
 
-// User Information
-
-test("My profile tab is active by default", async ({ page }) => {
+test("Budget is the section settings opens on", async ({ page }) => {
   await page.goto("/settings")
-  await expect(page.getByRole("tab", { name: "My profile" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  )
+  await expect(page.getByRole("combobox")).toHaveText(/Budget/)
 })
 
-test("All tabs are visible", async ({ page }) => {
+test("A superuser can open every section but Danger zone", async ({ page }) => {
   await page.goto("/settings")
-  for (const tab of tabs) {
-    await expect(page.getByRole("tab", { name: tab })).toBeVisible()
+  await page.getByRole("combobox").click()
+  for (const section of superuserSections) {
+    await expect(page.getByRole("option", { name: section })).toBeVisible()
   }
+  await expect(page.getByRole("option", { name: "Danger zone" })).toHaveCount(0)
+})
+
+test.describe("A regular user", () => {
+  test.use({ storageState: { cookies: [], origins: [] } })
+
+  test("also gets Danger zone", async ({ page }) => {
+    const email = randomEmail()
+    const password = randomPassword()
+    await createUser({ email, password })
+    await logInUser(page, email, password)
+
+    await page.goto("/settings")
+    await page.getByRole("combobox").click()
+    await expect(
+      page.getByRole("option", { name: "Danger zone" }),
+    ).toBeVisible()
+  })
 })
 
 test.describe("Edit user full name and email successfully", () => {
@@ -36,8 +52,7 @@ test.describe("Edit user full name and email successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
+    await page.goto("/settings?tab=my-profile")
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Full name").fill(updatedName)
     await page.getByRole("button", { name: "Save" }).click()
@@ -58,8 +73,7 @@ test.describe("Edit user full name and email successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
+    await page.goto("/settings?tab=my-profile")
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(updatedEmail)
     await page.getByRole("button", { name: "Save" }).click()
@@ -83,8 +97,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
+    await page.goto("/settings?tab=my-profile")
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(invalidEmail)
     await page.locator("body").click()
@@ -101,8 +114,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
+    await page.goto("/settings?tab=my-profile")
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Full name").fill(updatedName)
     await page.getByRole("button", { name: "Cancel" }).first().click()
@@ -121,8 +133,7 @@ test.describe("Edit user with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "My profile" }).click()
+    await page.goto("/settings?tab=my-profile")
     await page.getByRole("button", { name: "Edit" }).click()
     await page.getByLabel("Email").fill(updatedEmail)
     await page.getByRole("button", { name: "Cancel" }).first().click()
@@ -147,8 +158,7 @@ test.describe("Change password successfully", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "Password" }).click()
+    await page.goto("/settings?tab=password")
     await page.getByTestId("current-password-input").fill(password)
     await page.getByTestId("new-password-input").fill(NewPassword)
     await page.getByTestId("confirm-password-input").fill(NewPassword)
@@ -175,8 +185,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "Password" }).click()
+    await page.goto("/settings?tab=password")
     await page.getByTestId("current-password-input").fill(password)
     await page.getByTestId("new-password-input").fill(weakPassword)
     await page.getByTestId("confirm-password-input").fill(weakPassword)
@@ -199,8 +208,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "Password" }).click()
+    await page.goto("/settings?tab=password")
     await page.getByTestId("current-password-input").fill(password)
     await page.getByTestId("new-password-input").fill(newPassword)
     await page.getByTestId("confirm-password-input").fill(confirmPassword)
@@ -217,8 +225,7 @@ test.describe("Change password with invalid data", () => {
     // Log in the user
     await logInUser(page, email, password)
 
-    await page.goto("/settings")
-    await page.getByRole("tab", { name: "Password" }).click()
+    await page.goto("/settings?tab=password")
     await page.getByTestId("current-password-input").fill(password)
     await page.getByTestId("new-password-input").fill(password)
     await page.getByTestId("confirm-password-input").fill(password)
@@ -229,58 +236,43 @@ test.describe("Change password with invalid data", () => {
   })
 })
 
-// Appearance
+// Appearance: the theme picker is in the menu every page's header opens.
 
-test("Appearance button is visible in sidebar", async ({ page }) => {
-  await page.goto("/settings")
-  await expect(page.getByTestId("theme-button")).toBeVisible()
+const chooseTheme = async (page: Page, theme: "Light" | "Dark" | "System") => {
+  const menu = page.getByRole("dialog")
+  if (!(await menu.isVisible())) {
+    await page.getByRole("button", { name: "Open menu" }).click()
+  }
+  await menu.getByRole("combobox").click()
+  await page.getByRole("option", { name: theme }).click()
+}
+
+test("The menu shows the theme picker", async ({ page }) => {
+  await page.goto("/")
+  await page.getByRole("button", { name: "Open menu" }).click()
+  await expect(page.getByRole("dialog").getByRole("combobox")).toHaveText(
+    /Light|Dark|System/,
+  )
 })
 
 test("User can switch between theme modes", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/")
 
-  await page.getByTestId("theme-button").click()
-  await page.getByTestId("dark-mode").click()
+  await chooseTheme(page, "Dark")
   await expect(page.locator("html")).toHaveClass(/dark/)
 
-  // wait for dropdown to close before reopening
-  await expect(page.getByTestId("dark-mode")).not.toBeVisible()
-
-  await page.getByTestId("theme-button").click()
-  await page.getByTestId("light-mode").click()
+  await chooseTheme(page, "Light")
   await expect(page.locator("html")).toHaveClass(/light/)
 })
 
 test("Selected mode is preserved across sessions", async ({ page }) => {
-  await page.goto("/settings")
+  await page.goto("/")
+  await chooseTheme(page, "Dark")
+  await expect(page.locator("html")).toHaveClass(/dark/)
 
-  await page.getByTestId("theme-button").click()
-  if (
-    await page.evaluate(() =>
-      document.documentElement.classList.contains("dark"),
-    )
-  ) {
-    await page.getByTestId("light-mode").click()
-    await page.getByTestId("theme-button").click()
-  }
-
-  const isLightMode = await page.evaluate(() =>
-    document.documentElement.classList.contains("light"),
-  )
-  expect(isLightMode).toBe(true)
-
-  await page.getByTestId("theme-button").click()
-  await page.getByTestId("dark-mode").click()
-  let isDarkMode = await page.evaluate(() =>
-    document.documentElement.classList.contains("dark"),
-  )
-  expect(isDarkMode).toBe(true)
-
-  await logOutUser(page)
+  await page.getByRole("button", { name: "Log Out" }).click()
+  await page.waitForURL("/login")
   await logInUser(page, firstSuperuser, firstSuperuserPassword)
 
-  isDarkMode = await page.evaluate(() =>
-    document.documentElement.classList.contains("dark"),
-  )
-  expect(isDarkMode).toBe(true)
+  await expect(page.locator("html")).toHaveClass(/dark/)
 })

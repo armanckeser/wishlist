@@ -126,11 +126,15 @@ docker compose watch
 
 ## The .env file
 
-The `.env` file is the one that contains all your configurations, generated keys and passwords, etc.
+Docker Compose, the backend and the Playwright tests read their settings from `.env` at the repo root.
+Create it from the template once:
 
-Depending on your workflow, you could want to exclude it from Git, for example if your project is public. In that case, you would have to make sure to set up a way for your CI tools to obtain it while building or deploying your project.
+```bash
+cp .env.example .env
+```
 
-One way to do it could be to add each environment variable to your CI/CD system, and updating the `docker-compose.yml` file to read that specific env var instead of reading the `.env` file.
+`.env` is gitignored, so it can hold real tokens (a 17track key, VAPID keys) without reaching git. CI makes
+its own copy from `.env.example`.
 
 ## Pre-commits and code linting
 

@@ -78,7 +78,7 @@ def create_notification(
                 .where(Notification.user_id == user_id)
                 .where(Notification.notification_type == notification_type)
                 .where(col(Notification.created_at) > recent_cutoff)
-                .where(Notification.payload["item_id"].as_string() == item_id)
+                .where(col(Notification.payload)["item_id"].as_string() == item_id)
             ).first()
 
             if existing:

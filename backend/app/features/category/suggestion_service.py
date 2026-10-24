@@ -158,7 +158,6 @@ KEYWORD_TO_CATEGORY: dict[str, list[str]] = {
     "dior sauvage": ["perfume", "fragrance", "beauty"],
     "miss dior": ["perfume", "fragrance", "beauty"],
     "gucci bloom": ["perfume", "fragrance", "beauty"],
-    "chloe": ["perfume", "fragrance", "beauty"],
     "viktor & rolf": ["perfume", "fragrance", "beauty"],
     "flowerbomb": ["perfume", "fragrance", "beauty"],
     "maison francis kurkdjian": ["perfume", "fragrance", "beauty"],
@@ -242,7 +241,6 @@ KEYWORD_TO_CATEGORY: dict[str, list[str]] = {
     "marc jacobs": ["bags", "handbags", "accessories"],
     "polene": ["bags", "handbags", "accessories"],
     "mansur gavriel": ["bags", "handbags", "accessories"],
-    "staud": ["bags", "handbags", "accessories"],
     "demellier": ["bags", "handbags", "accessories"],
     "strathberry": ["bags", "handbags", "accessories"],
     # ===================
@@ -337,7 +335,6 @@ KEYWORD_TO_CATEGORY: dict[str, list[str]] = {
     "vince": ["clothing", "clothes", "fashion"],
     "theory": ["clothing", "clothes", "fashion"],
     "equipment": ["clothing", "clothes", "fashion"],
-    "frame": ["clothing", "clothes", "fashion"],
     "agolde": ["clothing", "clothes", "fashion"],
     "citizens of humanity": ["clothing", "clothes", "fashion"],
     "mother denim": ["clothing", "clothes", "fashion"],

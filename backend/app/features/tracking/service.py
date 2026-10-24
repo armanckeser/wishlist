@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
-from sqlmodel import Session, or_, select
+from sqlmodel import Session, col, or_, select
 
 from app.core.config import settings
 from app.features.tracking.client import SeventeenTrackClient
@@ -74,8 +74,8 @@ def get_items_with_tracking(
         or_(
             WishlistItem.status == WishlistItemStatus.TRACKING,
             (
-                WishlistItem.tracking_number.isnot(None)
-                & WishlistItem.status.in_(
+                col(WishlistItem.tracking_number).isnot(None)
+                & col(WishlistItem.status).in_(
                     [WishlistItemStatus.PURCHASED, WishlistItemStatus.GIFTED]
                 )
             ),
@@ -96,7 +96,7 @@ def get_active_tracking_items(session: Session) -> list[WishlistItem]:
         List of WishlistItems that need tracking updates
     """
     statement = select(WishlistItem).where(
-        WishlistItem.tracking_number.isnot(None),
+        col(WishlistItem.tracking_number).isnot(None),
         or_(
             WishlistItem.status == WishlistItemStatus.TRACKING,
             WishlistItem.status == WishlistItemStatus.PURCHASED,

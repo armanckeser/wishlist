@@ -55,9 +55,9 @@ function UserSettings() {
   const { tab } = Route.useSearch()
   const navigate = useNavigate()
 
-  // Superusers don't see "Danger zone" tab
+  // Superusers can't delete their own account, so they don't get "Danger zone".
   const finalTabs = currentUser?.is_superuser
-    ? tabsConfig.slice(0, 3)
+    ? tabsConfig.filter((t) => t.value !== "danger-zone")
     : tabsConfig
 
   const handleTabChange = (value: string) => {

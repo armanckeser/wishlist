@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test"
+import { expect, test } from "./fixtures.ts"
+import { randomString } from "./utils/random.ts"
 
 // Test with a FedEx-like tracking number pattern
 // The tracking-numbers library will parse this locally without hitting external APIs
@@ -28,22 +29,21 @@ test.describe("Tracking Page", () => {
   test("shows empty state when no packages", async ({ page }) => {
     await page.goto("/tracking")
 
-    // Check for empty state (may not appear if user has tracked items)
-    const emptyState = page.getByTestId("empty-tracking-state")
-    const trackingList = page.getByTestId("tracking-list")
-
-    // Either empty state or tracking list should be visible
-    const hasEmptyState = await emptyState.isVisible().catch(() => false)
-    const hasTrackingList = await trackingList.isVisible().catch(() => false)
-
-    expect(hasEmptyState || hasTrackingList).toBeTruthy()
+    // The page says how many packages there are; with none, it shows the empty state.
+    await expect(page.getByText(/^\d+ packages?$/)).toBeVisible()
+    if (await page.getByText("0 packages").isVisible()) {
+      await expect(page.getByTestId("empty-tracking-state")).toBeVisible()
+    }
   })
 
   test("FAB opens add tracking drawer", async ({ page }) => {
     await page.goto("/tracking")
 
     // Click the FAB button
-    await page.getByTestId("add-tracking-fab").click()
+    await page
+      .getByTestId("add-tracking-fab")
+      .getByRole("button", { name: "Add item" })
+      .click()
 
     // Verify drawer opens with "Track Package" title
     await expect(
@@ -58,7 +58,10 @@ test.describe("Tracking Page", () => {
     await page.goto("/tracking")
 
     // Open add tracking drawer
-    await page.getByTestId("add-tracking-fab").click()
+    await page
+      .getByTestId("add-tracking-fab")
+      .getByRole("button", { name: "Add item" })
+      .click()
 
     // Enter invalid tracking number
     await page.getByTestId("tracking-number-input").fill("invalid123")
@@ -82,7 +85,10 @@ test.describe("Tracking Page", () => {
     await page.goto("/tracking")
 
     // Open drawer
-    await page.getByTestId("add-tracking-fab").click()
+    await page
+      .getByTestId("add-tracking-fab")
+      .getByRole("button", { name: "Add item" })
+      .click()
     await expect(
       page.getByRole("heading", { name: "Track Package" }),
     ).toBeVisible()
@@ -100,7 +106,10 @@ test.describe("Tracking Page", () => {
     await page.goto("/tracking")
 
     // Open add tracking drawer
-    await page.getByTestId("add-tracking-fab").click()
+    await page
+      .getByTestId("add-tracking-fab")
+      .getByRole("button", { name: "Add item" })
+      .click()
 
     // Price should be marked as optional in tracking mode
     await expect(page.getByText("Price")).toBeVisible()
@@ -112,10 +121,15 @@ test.describe("Add Tracked Package Flow", () => {
   test("adds a tracked package with valid tracking number", async ({
     page,
   }) => {
+    // Unique, so a retry or an earlier run in the same database can't match it.
+    const packageName = `Test package ${randomString()}`
     await page.goto("/tracking")
 
     // Open add tracking drawer
-    await page.getByTestId("add-tracking-fab").click()
+    await page
+      .getByTestId("add-tracking-fab")
+      .getByRole("button", { name: "Add item" })
+      .click()
 
     // Enter tracking number
     await page.getByTestId("tracking-number-input").fill(TEST_TRACKING_NUMBER)
@@ -134,17 +148,20 @@ test.describe("Add Tracked Package Flow", () => {
       .catch(() => false)
 
     if (isValidDetection) {
-      // Fill in required title
-      await page.getByLabel(/Name/).fill("Test Package from FedEx")
+      // Name is a collapsed row; opening it focuses its input.
+      await page.locator("summary", { hasText: "Name" }).click()
+      await page.getByPlaceholder("e.g. Croissant Dôme Ring").fill(packageName)
 
       // Submit the form
       await page.getByRole("button", { name: "Save" }).click()
 
-      // Wait for drawer to close and list to update
-      await page.waitForTimeout(1000)
-
-      // Verify the item appears in the tracking list
-      await expect(page.getByText("Test Package from FedEx")).toBeVisible()
+      // The dialog closes and the package is in the list.
+      await expect(
+        page.getByRole("heading", { name: "Track Package" }),
+      ).toBeHidden()
+      await expect(
+        page.getByRole("heading", { name: packageName }),
+      ).toBeVisible()
     }
   })
 

@@ -1,6 +1,6 @@
-import { test as setup } from "@playwright/test"
 import { WHATS_NEW_VERSION } from "../src/config/whats-new.ts"
 import { firstSuperuser, firstSuperuserPassword } from "./config.ts"
+import { test as setup } from "./fixtures.ts"
 
 const authFile = "playwright/.auth/user.json"
 

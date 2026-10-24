@@ -1,0 +1,58 @@
+# Wishlist all-in-one: Postgres and Wishlist in ONE container, for platforms that install one container
+# per app (Unraid Community Apps) and for anyone who wants `docker run` and nothing else. Everything it
+# keeps is under /data — mount that one path and back it up.
+#
+#   docker run -d -p 8080:8080 -v wishlist-data:/data ghcr.io/armanckeser/wishlist:aio
+#
+# s6-overlay supervises both processes (aio/s6-rc.d). Built from the app image of the same version
+# (APP_IMAGE): Python and the app come from there. Both images are Debian bookworm.
+
+ARG APP_IMAGE
+FROM ${APP_IMAGE} AS app
+
+FROM postgres:17-bookworm
+ARG TARGETARCH
+ARG S6_OVERLAY_VERSION=3.2.1.0
+
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends xz-utils ca-certificates openssl locales \
+ && sed -i 's/# en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && locale-gen \
+ && rm -rf /var/lib/apt/lists/*
+
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp/
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-x86_64.tar.xz /tmp/
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-aarch64.tar.xz /tmp/
+RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz \
+ && tar -C / -Jxpf "/tmp/s6-overlay-$([ "$TARGETARCH" = "arm64" ] && echo aarch64 || echo x86_64).tar.xz" \
+ && rm /tmp/s6-overlay-*.tar.xz
+
+# Python lives in /usr/local in the app image; the venv's interpreter links to /usr/local/bin/python3.
+COPY --from=app /usr/local/bin/python3.12 /usr/local/bin/python3.12
+COPY --from=app /usr/local/lib/python3.12 /usr/local/lib/python3.12
+COPY --from=app /usr/local/lib/libpython3.12.so.1.0 /usr/local/lib/
+RUN ln -s python3.12 /usr/local/bin/python3 && ln -s python3 /usr/local/bin/python && ldconfig \
+ && useradd --create-home --uid 1000 app
+COPY --from=app --chown=app:app /app /app
+
+COPY aio/s6-rc.d /etc/s6-overlay/s6-rc.d
+COPY aio/scripts /etc/s6-overlay/scripts
+# A checkout on Windows can carry CRLF line endings and no executable bit; s6 needs both right.
+RUN find /etc/s6-overlay/s6-rc.d /etc/s6-overlay/scripts -type f -exec sed -i 's/\r$//' {} + \
+ && chmod +x /etc/s6-overlay/scripts/* /etc/s6-overlay/s6-rc.d/*/run
+
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH" \
+    PYTHONPATH=/app \
+    ENVIRONMENT=production \
+    PORT=8080 \
+    WEB_ROOT=/app/web \
+    S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0 \
+    S6_BEHAVIOUR_IF_STAGE2_FAILS=2
+
+VOLUME /data
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=5s --start-period=120s \
+  CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/v1/utils/health-check/')"
+ENTRYPOINT ["/init"]

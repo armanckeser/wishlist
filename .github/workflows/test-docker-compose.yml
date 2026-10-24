@@ -1,26 +1,47 @@
 name: Test Docker Compose
 
+# The development stack (docker-compose.yml + docker-compose.override.yml) builds and answers.
+
 on:
   push:
-    branches:
-      - master
+    branches: [main]
   pull_request:
-    types:
-      - opened
-      - synchronize
 
 jobs:
-
   test-docker-compose:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+      - run: cp .env.example .env
       - run: docker compose build
-      - run: docker compose down -v --remove-orphans
       - run: docker compose up -d --wait backend frontend adminer
       - name: Test backend is up
-        run: curl http://localhost:8000/api/v1/utils/health-check
+        run: curl -fsS http://localhost:8000/api/v1/utils/health-check/
       - name: Test frontend is up
-        run: curl http://localhost:5173
+        run: curl -fsS -o /dev/null http://localhost:5173
       - run: docker compose down -v --remove-orphans
+        if: always()
+
+  # The self-host stack: the single image, started with nothing configured.
+  test-selfhost-stack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - run: docker build -t ghcr.io/armanckeser/wishlist:latest .
+      - run: docker compose -f docker-compose.selfhost.yml up -d --wait
+      - name: API, web app and service worker are served
+        run: |
+          curl -fsS http://localhost:8080/api/v1/utils/health-check/
+          curl -fsS -o /dev/null http://localhost:8080/
+          curl -fsS -o /dev/null http://localhost:8080/sw.js
+      - name: The first person can sign up and sign in
+        run: |
+          curl -fsS -H 'content-type: application/json' \
+            -d '{"email":"first@example.com","password":"a-long-password","full_name":"First"}' \
+            http://localhost:8080/api/v1/users/signup
+          curl -fsS -d 'username=first@example.com&password=a-long-password' \
+            http://localhost:8080/api/v1/login/access-token
+      - run: docker compose -f docker-compose.selfhost.yml logs app
+        if: failure()
+      - run: docker compose -f docker-compose.selfhost.yml down -v
+        if: always()

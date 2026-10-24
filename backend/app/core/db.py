@@ -40,7 +40,9 @@ engine = create_engine(
 
 
 def init_db(session: Session) -> None:
-    """Initialize the database with the first superuser."""
+    """Initialize the database with the first superuser, when one is configured."""
+    if not settings.FIRST_SUPERUSER or not settings.FIRST_SUPERUSER_PASSWORD:
+        return
     user = session.exec(
         select(User).where(User.email == settings.FIRST_SUPERUSER)
     ).first()

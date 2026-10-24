@@ -1,0 +1,7 @@
+#!/command/with-contenv sh
+PASSWORD="$(cat /data/secrets/postgres-password)"
+export POSTGRES_SERVER=127.0.0.1 POSTGRES_PORT=5432 POSTGRES_USER=postgres POSTGRES_DB=app
+export POSTGRES_PASSWORD="$PASSWORD"
+export HOME=/data/home
+cd /app
+exec s6-setuidgid app bash scripts/start-with-prestart.sh
