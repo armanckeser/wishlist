@@ -1,9 +1,9 @@
-<p align="center">
-  <img src="img/banner.png" alt="Wishlist: a wishlist that makes you wait. Your allowance grows by the second; impulse buys freeze it." width="100%" />
-</p>
+**Tapping "buy" online doesn't feel like spending money.**
+Wishlist makes you wait: your allowance grows by the second, and nothing is ready to buy until it has cooled off.
 
-**A wishlist that makes you wait.** Your allowance grows by the second, and nothing is
-ready to buy until it has cooled off.
+<p align="center">
+  <img src="img/hero.gif" alt="The balance ticks up from $214.80; buying $165 sneakers that are still cooling off drops it to $49.80 and freezes it for 7 days" width="360" />
+</p>
 
 ```bash
 docker compose -f oci://ghcr.io/armanckeser/wishlist-stack:latest up -d
@@ -28,9 +28,16 @@ Unraid's Community Apps doesn't list it yet; [selfhost-apps](https://github.com/
 
 </details>
 
-<p align="center">
-  <img src="img/hero.gif" alt="The balance ticks up from $214.80; buying $165 sneakers that are still cooling off drops it to $49.80 and freezes it for 7 days" width="360" />
-</p>
+<table>
+  <tr>
+    <td width="50%"><img src="img/price-tracking.png" alt="Price tracking: an item added at $185 dropped to $168, then $149, shown as a step chart with a 19% drop" /></td>
+    <td width="50%"><img src="img/gift.png" alt="Gift This Item: a friend gifts a Pearl Necklace with an optional name, personal message and tracking link" /></td>
+  </tr>
+  <tr>
+    <td><sub><b>Price drops.</b> Every saved item is checked daily, and a drop sends a notification.</sub></td>
+    <td><sub><b>Gifts.</b> Friends open your list and gift an item, anonymously if they like.</sub></td>
+  </tr>
+</table>
 
 - **See your money grow.** The balance ticks up live; purchases come straight off the top.
 - **Wait before you buy.** Set a rule like "3 days for every $100"; each item counts down.
