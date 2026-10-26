@@ -11,7 +11,7 @@ jobs:
   test-docker-compose:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: cp .env.example .env
       - run: docker compose build
       - run: docker compose up -d --wait backend frontend adminer
@@ -26,7 +26,7 @@ jobs:
   test-selfhost-stack:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - run: docker build -t ghcr.io/armanckeser/wishlist:latest .
       - run: docker compose -f docker-compose.selfhost.yml up -d --wait
       - name: API, web app and service worker are served
